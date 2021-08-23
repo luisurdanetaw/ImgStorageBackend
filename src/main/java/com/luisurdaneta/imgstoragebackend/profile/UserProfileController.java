@@ -5,7 +5,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -22,11 +21,10 @@ public class UserProfileController {
 
     //Default requestmapping request type is GET
     @GetMapping
-    public List<UserProfile> getUserProfiles(){
+    public Iterable<UserProfile> getUserProfiles(){
         return userProfileService.getUserProfiles();
     }
 
-    //http://localhost:8080/api/v1/user-profile/2390570?file=song.mp3
     @PostMapping(
             path = "/{userProfileId}/image/upload",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
@@ -41,4 +39,10 @@ public class UserProfileController {
     public byte[] downloadUserProfileImage(@PathVariable("userProfileId") UUID userProfileId){
         return userProfileService.downloadUserProfileImage(userProfileId);
     }
+
+    @RequestMapping(path = "/{username}/create-user")
+    public void createUser(@PathVariable("username") String username){
+        userProfileService.createUser(username);
+    }
+
 }

@@ -1,15 +1,36 @@
 package com.luisurdaneta.imgstoragebackend.profile;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
+@Entity
 public class UserProfile {
 
     //userProfileImageLink not final because database is in memory
-    private final UUID userProfileId;
-    private final String username;
+    @Id
+    private Long id;
+    private UUID userProfileId;
+    private String username;
     private String userProfileImageLink; //S3 Key
+
+
+    public UserProfile(){
+        this.id = generateId();
+        this.userProfileId = UUID.randomUUID();
+        this.username = null;
+        this.userProfileImageLink = null;
+    }
+
+    public UserProfile(String username){
+        this.id = generateId();
+        this.userProfileId = UUID.randomUUID();
+        this.username = username;
+        this.userProfileImageLink = null;
+    }
 
     public UserProfile(UUID userProfileId, String username, String userProfileImageLink) {
         this.userProfileId = userProfileId;
@@ -47,4 +68,19 @@ public class UserProfile {
     public int hashCode() {
         return Objects.hash(userProfileId, username, userProfileImageLink);
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    private Long generateId() {
+        Random rn = new Random();
+        return rn.nextLong();
+    }
+
 }
+

@@ -25,6 +25,13 @@ public class FileStore {
 
     public void save(String path, String fileName, Optional<Map<String, String>> optionalMetadata,
                      InputStream inputStream){
+
+        //Warning when uploading file to S3:
+
+        // No content length specified for stream data.
+        // Stream contents will be buffered in memory and could result in out of memory errors.
+
+        // metadata.setContentLength(fileName.length()); Fix?
         ObjectMetadata metadata = new ObjectMetadata();
         optionalMetadata.ifPresent(map -> {
             if (!map.isEmpty()) {

@@ -1,6 +1,7 @@
 package com.luisurdaneta.imgstoragebackend.profile;
 
 import com.luisurdaneta.imgstoragebackend.bucket.BucketName;
+import com.luisurdaneta.imgstoragebackend.datastore.UserRepository;
 import com.luisurdaneta.imgstoragebackend.filestore.FileStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,23 +9,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.StreamSupport;
 
 import static org.apache.http.entity.ContentType.*;
 
 @Service
 public class UserProfileService {
 
-    private final UserProfileDataAccessObject userProfileDataAccessObject;
+    private final UserRepository userRepository;
     private final FileStore fileStore;
 
     @Autowired
-    public UserProfileService(UserProfileDataAccessObject userProfileDataAccessObject, FileStore fileStore){
-        this.userProfileDataAccessObject = userProfileDataAccessObject;
+    public UserProfileService(UserRepository userRepository, FileStore fileStore){
+        this.userRepository = userRepository;
         this.fileStore = fileStore;
     }
 
-    List<UserProfile> getUserProfiles(){
-        return userProfileDataAccessObject.getUserProfiles();
+    Iterable<UserProfile> getUserProfiles(){
+        return userRepository.findAll();
     }
 
     public void uploadUserProfileImage(UUID userProfileId, MultipartFile file) {
@@ -64,9 +66,7 @@ public class UserProfileService {
 
     private UserProfile doesUserExist(UUID userProfileId) {
 
-        return userProfileDataAccessObject
-                .getUserProfiles()
-                .stream()
+        return StreamSupport.stream(userRepository.findAll().spliterator(), false)
                 .filter(userProfile -> userProfile.getUserProfileId().equals(userProfileId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("User not found"));
@@ -101,8 +101,10 @@ public class UserProfileService {
         return user.getUserProfileImageLink()
                 .map(key -> fileStore.download(path, key))
                 .orElse(new byte[0]);
+    }
 
-
-
+    public void createUser(String username) {
+        UserProfile user = new UserProfile(username);
+        userRepository.save(user);
     }
 }
