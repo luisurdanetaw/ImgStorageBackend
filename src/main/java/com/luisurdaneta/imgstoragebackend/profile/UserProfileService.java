@@ -32,14 +32,14 @@ public class UserProfileService {
     public void uploadUserProfileImage(UUID userProfileId, MultipartFile file) {
         //Check if file not empty
         isFileEmpty(file);
+
         //Check if file is an img
         isFileImg(file);
-        //Check if the user exists in our database
 
+        //Check if the user exists in our database
         UserProfile user = doesUserExist(userProfileId);
 
         //Grab metadata from file if any
-
         Map<String, String> metadata = getMetadata(file);
 
         //Store img to s3
@@ -53,17 +53,13 @@ public class UserProfileService {
             throw new IllegalStateException(e);
         }
         //Update database with s3 img link
-
-
     }
-
     private Map<String, String> getMetadata(MultipartFile file) {
         Map<String, String> metadata = new HashMap<>();
         metadata.put("Content-Type", file.getContentType());
         metadata.put("Content-Length", String.valueOf(file.getSize()));
         return metadata;
     }
-
     private UserProfile doesUserExist(UUID userProfileId) {
 
         return StreamSupport.stream(userRepository.findAll().spliterator(), false)
