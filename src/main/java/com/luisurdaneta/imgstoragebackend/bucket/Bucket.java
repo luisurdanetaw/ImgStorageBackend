@@ -1,12 +1,12 @@
 package com.luisurdaneta.imgstoragebackend.bucket;
 
-public enum BucketName {
+public enum Bucket {
 
-    PROFILE_IMAGE("img-upload-bucket-luisurdaneta");
+    BUCKET_NAME("img-upload-bucket-luisurdaneta");
 
     private final String bucketName;
 
-    BucketName(String bucketName){
+    Bucket(String bucketName){
         this.bucketName = bucketName;
     }
 

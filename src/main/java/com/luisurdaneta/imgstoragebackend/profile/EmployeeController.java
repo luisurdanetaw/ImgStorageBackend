@@ -3,25 +3,25 @@ package com.luisurdaneta.imgstoragebackend.profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/user-profile")
-@CrossOrigin("*") //Do not use in production.
-public class UserProfileController {
+@RequestMapping("employees/v1/")
+@CrossOrigin("*")
+public class EmployeeController {
 
-    private final UserProfileService userProfileService;
+    private final EmployeeService userProfileService;
 
     @Autowired
-    public UserProfileController(UserProfileService userProfileService){
+    public EmployeeController(EmployeeService userProfileService){
         this.userProfileService = userProfileService;
     }
 
-    //Default requestmapping request type is GET
     @GetMapping
-    public Iterable<UserProfile> getUserProfiles(){
+    public Iterable<Employee> getUserProfiles(){
         return userProfileService.getUserProfiles();
     }
 
@@ -31,13 +31,13 @@ public class UserProfileController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public void uploadUserProfileImage(@PathVariable("userProfileId") UUID userProfileId,
-                                       @RequestParam("file") MultipartFile file){
+                                       @RequestParam("file") File file) throws IOException {
 
-        userProfileService.uploadUserProfileImage(userProfileId, file);
+        userProfileService.upload(userProfileId, file);
     }
     @GetMapping("/{userProfileId}/image/download")
     public byte[] downloadUserProfileImage(@PathVariable("userProfileId") UUID userProfileId){
-        return userProfileService.downloadUserProfileImage(userProfileId);
+        return userProfileService.download(userProfileId);
     }
 
     @RequestMapping(path = "/{username}/create-user")

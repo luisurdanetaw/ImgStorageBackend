@@ -7,6 +7,7 @@ public class Vertex {
     private String label;
     private int index;
     private String type;
+    private float salary;
 
     public Vertex() {
     }
@@ -52,5 +53,13 @@ public class Vertex {
 
     public void setEdgeList(LinkedList<Edge> edgeList) {
         this.edgeList = edgeList;
+    }
+
+    public float getSalary() {
+        return salary;
+    }
+
+    public void setSalary(float salary) {
+        this.salary = salary;
     }
 }

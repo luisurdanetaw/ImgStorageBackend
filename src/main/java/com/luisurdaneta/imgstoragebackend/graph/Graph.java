@@ -130,5 +130,7 @@ public class Graph implements GraphADT {
         return distances[getLabelIndex(endLabel)];
     }
 
-
+    public ArrayList<Vertex> getAdjacencyList() {
+        return adjacencyList;
+    }
 }

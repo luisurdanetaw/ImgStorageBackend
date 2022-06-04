@@ -1,42 +1,61 @@
 package com.luisurdaneta.imgstoragebackend.profile;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Entity
-public class UserProfile {
+public class Employee {
 
-    //userProfileImageLink not final because database is in memory
     @Id
+    @SequenceGenerator(
+            name = "sequence",
+            sequenceName = "sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            generator = "sequence",
+            strategy = GenerationType.SEQUENCE
+    )
     private Long id;
     private UUID userProfileId;
     private String username;
-    private String userProfileImageLink; //S3 Key
+    private String userProfileImageLink;
+    private float salary;
 
 
-    public UserProfile(){
-        this.id = generateId();
+    public Employee(){
         this.userProfileId = UUID.randomUUID();
         this.username = null;
         this.userProfileImageLink = null;
+        this.salary = 0F;
     }
 
-    public UserProfile(String username){
-        this.id = generateId();
+    public Employee(String username){
         this.userProfileId = UUID.randomUUID();
         this.username = username;
         this.userProfileImageLink = null;
+        this.salary = 0F;
     }
 
-    public UserProfile(UUID userProfileId, String username, String userProfileImageLink) {
+    public Employee(UUID userProfileId, String username, String userProfileImageLink) {
         this.userProfileId = userProfileId;
         this.username = username;
         this.userProfileImageLink = userProfileImageLink;
+        this.salary = 0F;
+
     }
+    public Employee(UUID userProfileId, String username, String userProfileImageLink, float salary) {
+        this.userProfileId = userProfileId;
+        this.username = username;
+        this.userProfileImageLink = userProfileImageLink;
+        this.salary = salary;
+
+    }
+
+
+
 
     public Optional<String> getUserProfileImageLink() {
         return Optional.ofNullable(userProfileImageLink);
@@ -58,7 +77,7 @@ public class UserProfile {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserProfile that = (UserProfile) o;
+        Employee that = (Employee) o;
         return Objects.equals(userProfileId, that.userProfileId) &&
                 Objects.equals(username, that.username) &&
                 Objects.equals(userProfileImageLink, that.userProfileImageLink);
@@ -69,18 +88,12 @@ public class UserProfile {
         return Objects.hash(userProfileId, username, userProfileImageLink);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Long getId() {
-        return id;
+    public float getSalary() {
+        return salary;
     }
-
-    private Long generateId() {
-        Random rn = new Random();
-        return rn.nextLong();
+    public void setSalary (float salary){
+        this.salary = salary;
     }
-
 }
 

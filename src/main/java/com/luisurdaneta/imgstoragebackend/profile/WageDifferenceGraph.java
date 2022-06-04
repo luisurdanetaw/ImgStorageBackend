@@ -10,6 +10,14 @@ public class WageDifferenceGraph {
         graph = new Graph();
     }
 
-    public void addEmployee(String name, long wage, List<String> coworkers){
+    public void addEmployee(Employee employee){
+        graph.addVertex(employee.getUsername());
+
+        for(Vertex vertex : graph.getAdjacencyList()){
+            if(!vertex.getLabel().equals(employee.getUsername())){
+                graph.addEdge(employee.getUsername(), vertex.getLabel(), employee.getSalary() - vertex.getSalary());
+            }
+        }
     }
+
 }

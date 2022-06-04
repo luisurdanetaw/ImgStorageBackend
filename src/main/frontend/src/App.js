@@ -4,25 +4,25 @@ import './App.css';
 
 const UserProfiles = () => {
 
-    const [userProfiles, setUserProfiles] = useState([]);
+    const [Employees, setEmployeeProfiles] = useState([]);
 
-  const fetchUserProfiles = () => {
-      fetch("http://localhost:8080/api/v1/user-profile")
+  const fetchEmployees = () => {
+      fetch("http://localhost:8080/employees/v1/")
           .then(res => res.json())
-          .then(data => setUserProfiles(data));
+          .then(data => setEmployeeProfiles(data));
   }
 
-  useEffect(() => fetchUserProfiles(), [] );
+  useEffect(() => fetchEmployees(), [] );
 
-  return userProfiles.map((userProfile, index) => {
+  return Employees.map((employee) => {
       return(
-          <div key={index}>
-              {userProfile.userProfileId ? <img alt="pfp" src={`http://localhost:8080/api/v1/user-profile/${userProfile.userProfileId}/image/download`}/> : null}
+          <div>
+              {employee.userProfileId ? <img alt="pfp" src={`http://localhost:8080/employee/v1/${userProfile.userProfileId}/image/download`}/> : null}
               <br/>
               <br/>
-              <h2>{userProfile.username}</h2>
-              <p>{userProfile.userProfileId}</p>
-              <Dropzone userProfileId = {userProfile.userProfileId}/>
+              <h2>{employee.username}</h2>
+              <p>{employee.userProfileId}</p>
+              <Dropzone userProfileId = {employee.userProfileId}/>
               <br/>
           </div>
       )
@@ -30,12 +30,11 @@ const UserProfiles = () => {
 }
 function Dropzone({userProfileId}) {
     const onDrop = useCallback(acceptedFiles => {
-        const file = acceptedFiles[0];
-        console.log(file);
-        const formData = new FormData();
-        formData.append("file", file);
 
-        fetch(`http://localhost:8080/api/v1/user-profile/${userProfileId}/image/upload`, {
+        const formData = new FormData();
+        formData.append("file", acceptedFiles[0]);
+
+        fetch(`http://localhost:8080/employees/v1/${userProfileId}/image/upload`, {
             method: 'post',
             body: formData
         })
@@ -58,8 +57,8 @@ function Dropzone({userProfileId}) {
 function App() {
   return (
     <div className="App">
-        <h1>Registry</h1>
-        <br/>
+        <h1>Employees</h1>
+        <hr/>
         <UserProfiles/>
     </div>
   );

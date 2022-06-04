@@ -2,7 +2,7 @@ package com.luisurdaneta.imgstoragebackend.graph;
 
 public class Edge {
     private String targetLabel;
-    private long weight;
+    private float weight;
 
     public Edge() {
     }
@@ -20,11 +20,11 @@ public class Edge {
         this.targetLabel = targetLabel;
     }
 
-    public long getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public void setWeight(long weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 }
